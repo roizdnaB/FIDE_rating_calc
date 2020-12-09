@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand-lg navbar-light">
+    <label class="navbar-brand"><b>FIDE Rating Calculator</b></label>
+    <button class="navbar-toggler" type="button" (click)="toogleNavbar()">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" #navbarNav href="\init">Initial Rating</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="\single">Single game</a>
+            </li>
+        </ul>
+    </div>
+</nav>

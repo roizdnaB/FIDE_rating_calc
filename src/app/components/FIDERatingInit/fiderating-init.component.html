@@ -1,0 +1,66 @@
+<div class="fideinit">
+    <label class="title">Initial Rating</label>
+    <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+    
+        <div class="form-group">
+            <label for="opponentsRating">Opponents rating</label>
+            <input type="number" min="1000" max="2900" placeholder="Enter opponents ranking" class="form-control" formControlName="opponentsRating" [ngClass]="{ 'is-invalid': submitted && f.opponentsRating.errors }" />
+            <div *ngIf="submitted && f.opponentsRating.errors">
+                <div *ngIf="f.opponentsRating.errors.required">Opponents rating is required</div>
+                <div *ngIf="f.opponentsRating.errors.min">The rating cannot be lower than 1000</div>
+                <div *ngIf="f.opponentsRating.errors.max">The rating cannot be greater than 2900</div>
+            </div>
+            <small class="form-text text-muted">Average rating of rated opponents in all tournaments.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="totalScore">Total score</label>
+            <input type="number" min="0" step="0.5" placeholder="Enter total score" class="form-control" formControlName="totalScore" [ngClass]="{ 'is-invalid': submitted && f.totalScore.errors }" />
+            <div *ngIf="submitted && (f.totalScore.errors || f.errors)">
+                <div *ngIf="f.totalScore.errors.required">Total score is required</div>
+                <div *ngIf="f.totalScore.errors.min">Total score cannot be negative</div>
+                <div *ngIf="f.errors.wrongValue">Total score is invalid.</div>
+            </div>
+            <small class="form-text text-muted">Total score against rated opponents in all tournaments.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="numberOfGames">Number of games</label>
+            <input type="number" min="1" max="70" step="1" placeholder="Enter number of games" class="form-control" formControlName="numberOfGames" [ngClass]="{ 'is-invalid': submitted && f.numberOfGames.errors }" />
+            <div *ngIf="submitted && f.numberOfGames.errors">
+                <div *ngIf="f.numberOfGames.errors.required">Number of games is required</div>
+                <div *ngIf="f.numberOfGames.errors.min">Number of games cannot be lower than 1</div>
+                <div *ngIf="f.numberOfGames.errors.max">Number of games cannot be greater than 70</div>
+                <div *ngIf="f.numberOfGames.errors.pattern">Number of games should be an integer</div>
+            </div>
+            <small class="form-text text-muted">Number of games against rated opponents in all tournaments.</small>
+        </div>
+    
+        <button type="submit" class="btn btn-primary btn-lg">Calculate</button>
+    </form>
+
+    <div class="resultBox" id="resultBox" *ngIf="showResult">
+        Your new rating is: 
+        <label class="result">{{result}}</label>
+    </div>
+</div>
+<div class="importantNotes">
+    <h3>Important Notes</h3>
+    <p>If you want to use the calculator, you have to take into account the following:</p>
+    <ul>
+        <li>If an unrated player scores zero in his first event, his score is disregarded.</li>
+        <li>The initial rating has to be grater than 1000 otherwise, it will not be published by FIDE.</li>
+    </ul>
+</div>
+<div class="aboutFormula">
+    <h3>About formula</h3>
+    <p>To calculate the initial rating we have to consider three cases:</p>
+    <ul>
+        <li>If the player scores 50%, then his rating is equal to the average opponents rating.</li>
+        <li>If the player scores more than 50%, then his rating is equal to the average opponents rating plus 20 points
+            for each half point scored over 50%.</li>
+        <li>If the player scores less than 50%, then his rating is equal to the average opponents rating minus
+            <b>the rating difference</b> (in a Swiss or team tournament). The rating difference value depends on <b>the fractional score</b> and can
+            be found in the table <b><a href="https://handbook.fide.com/chapter/B022017">here</a></b> (point 8.1a).</li>
+    </ul>
+</div>

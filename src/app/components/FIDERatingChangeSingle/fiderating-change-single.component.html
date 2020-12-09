@@ -1,0 +1,87 @@
+<div class="fidesingle">
+    <label class="title">Single Game</label>
+    <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="userRating">Your ranking</label>
+          <input type="number" min="1000" max="2900" step="1" placeholder="Enter your ranking" class="form-control" formControlName="userRating" [ngClass]="{ 'is-invalid': submitted && f.userRating.errors }" />
+          <div *ngIf="submitted && f.userRating.errors">
+              <div *ngIf="f.userRating.errors.required">Your rating is required</div>
+              <div *ngIf="f.userRating.errors.min">The rating cannot be lower than 1000</div>
+              <div *ngIf="f.userRating.errors.max">The rating cannot be greater than 2900</div>
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="opponentRating">Opponent rating</label>
+          <input type="number" min="1000" max="2900" step="1" placeholder="Enter opponent ranking" class="form-control" formControlName="opponentRating" [ngClass]="{ 'is-invalid': submitted && f.opponentRating.errors }" />
+          <div *ngIf="submitted && f.opponentRating.errors">
+              <div *ngIf="f.opponentRating.errors.required">Opponent rating is required</div>
+              <div *ngIf="f.opponentRating.errors.min">The rating cannot be lower than 1000</div>
+              <div *ngIf="f.opponentRating.errors.max">The rating cannot be greater than 2900</div>
+          </div>
+        </div>
+    
+        <div class="form-group">
+            <label for="score">Score</label>
+            <select class="form-control" formControlName="score" [ngClass]="{ 'is-invalid': submitted && f.score.errors }">
+                <option value="" disabled selected hidden>Select score</option>
+                <option value="1">Win (1)</option>
+                <option value="0.5">Draw (0.5)</option>
+                <option value="0">Loss (0)</option>
+            </select>
+            <div *ngIf="submitted && f.score.errors">
+                <div *ngIf="f.score.errors.required">Score is required</div>
+            </div>
+        </div>
+    
+        <div class="form-group">
+            <label for="developmentCoeff">K</label>
+            <select class="form-control" formControlName="developmentCoeff" [ngClass]="{ 'is-invalid': submitted && f.developmentCoeff.errors }">
+                <option value="" disabled selected hidden>Select K</option>
+                <option value="40">40</option>
+                <option value="30">30</option>
+                <option value="20">20</option>
+                <option value="15">15</option>
+                <option value="10">10</option>
+            </select>
+            <small class="form-text text-muted">Development coefficient.</small>
+            <div *ngIf="submitted && f.developmentCoeff.errors">
+                <div *ngIf="f.developmentCoeff.errors.required">K is required</div>
+            </div>
+        </div>
+    
+        <button type="submit" class="btn btn-primary btn-lg">Calculate</button>
+    </form>
+
+    <div class="resultBox" id="resultBox" *ngIf="showResult">
+        Rating change is: 
+        <label [ngClass]="{ 'positive': result.includes('+'), 'negative': result.includes('-') }">{{result}}</label>
+    </div>
+</div>
+
+<div class="aboutK">
+    <h3>About K</h3>
+    <p> K is the development coefficient. It usually takes values between 10 and 40. FIDE uses the following ranges: </p>
+    <ul>
+        <li>K = 40, for a player new to the rating list until the completion of events with a total of 30 games and for all players until their 18th birthday, as long as their rating remains under 2300.</li>
+        <li>K = 20, for players with a rating always under 2400 and for BLITZ/RAPID games.</li>
+        <li>K = 10, for players with any published rating of at least 2400 and at least 30 games played in previous events.</li>
+    </ul>
+    <p>Used ranges before July 2014: </p>
+    <ul>
+        <li>K = 30, for a player new to the rating list until the completion of events with a total of 30 games.</li>
+        <li>K = 15, for players with a rating always under 2400.</li>
+    </ul>
+</div>
+<div class="aboutFormula">
+    <h3>About formula</h3>
+    <p>To calculate the new rating we have to work out the expected score (<b>ES</b>), using following formula:</p>
+    <ng-katex class="equation" [equation]="equation1"></ng-katex>
+    
+
+    <p><br>Where <b>RatA</b> is your rating and <b>RatB</b> is opponent rating. </p>
+
+    <p>Then we can calculate the new rating:</p>
+    <ng-katex class="equation" [equation]="equation2"></ng-katex>
+    <p><br>Where <b>S</b> is the outcome of the game and <b>K</b> is the development coefficient.</p>
+</div>
